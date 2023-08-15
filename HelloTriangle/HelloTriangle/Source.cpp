@@ -39,7 +39,7 @@ const GLchar* vertexShaderSource = "#version 400\n"
 "gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
 "}\0";
 
-//Códifo fonte do Fragment Shader (em GLSL): ainda hardcoded
+//Código fonte do Fragment Shader (em GLSL): ainda hardcoded
 const GLchar* fragmentShaderSource = "#version 400\n"
 "uniform vec4 inputColor;\n"
 "out vec4 color;\n"
@@ -68,7 +68,7 @@ int main()
 //#endif
 
 	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo!", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle-Fernando Facco Rodrigues!", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Fazendo o registro da função de callback para a janela GLFW
