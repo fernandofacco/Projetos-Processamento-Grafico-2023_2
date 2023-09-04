@@ -13,15 +13,8 @@
 
 using namespace std;
 
-// GLAD
-//#include <glad/glad.h> - Desnecessário, já presente em Shader.h
-
-// GLFW
-//#include <GLFW/glfw3.h> - Desnecessário, já presente em Shader.h
-
-// Classe para manipulação dos shaders
+//Classe para manipulação dos shaders
 #include "Shader.h"
-
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -52,7 +45,7 @@ int main()
 //#endif
 
 	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle-Fernando Facco Rodrigues!", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo! -- Rossana", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Fazendo o registro da função de callback para a janela GLFW
@@ -82,7 +75,7 @@ int main()
 
 	// Gerando um buffer simples, com a geometria de um triângulo
 	GLuint VAO = setupGeometry();
-	
+		
 	shader.Use();
 	
 	// Loop da aplicação - "game loop"
@@ -103,7 +96,7 @@ int main()
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
+		
 		glBindVertexArray(0); //Desconectando o buffer de geometria
 
 		// Troca os buffers da tela
@@ -137,10 +130,10 @@ int setupGeometry()
 	// Cada atributo do vértice (coordenada, cores, coordenadas de textura, normal, etc)
 	// Pode ser arazenado em um VBO único ou em VBOs separados
 	GLfloat vertices[] = {
-		//x   y    z    r    g    b
-		-0.5, 0.5, 0.0, 1.0, 0.0, 0.0, //v0
-		 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, //v1
-		 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, //v2
+		//x    y    z    r    g    b 
+		-0.5,  0.5, 0.0, 1.0, 0.0, 0.0, //v0
+		 0.0,  0.0, 0.0, 0.0, 1.0, 0.0, //v1
+ 		 0.5,  0.5, 0.0, 0.0, 0.0, 1.0 //v2 
 	};
 
 	GLuint VBO, VAO;

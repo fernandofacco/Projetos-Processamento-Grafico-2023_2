@@ -13,15 +13,8 @@
 
 using namespace std;
 
-// GLAD
-//#include <glad/glad.h> - Desnecessário, já presente em Shader.h
-
-// GLFW
-//#include <GLFW/glfw3.h> - Desnecessário, já presente em Shader.h
-
-// Classe para manipulação dos shaders
+//Classe para manipulação dos shaders
 #include "Shader.h"
-
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -52,7 +45,7 @@ int main()
 //#endif
 
 	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle-Fernando Facco Rodrigues!", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo! -- Rossana", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Fazendo o registro da função de callback para a janela GLFW
@@ -82,7 +75,7 @@ int main()
 
 	// Gerando um buffer simples, com a geometria de um triângulo
 	GLuint VAO = setupGeometry();
-	
+		
 	shader.Use();
 	
 	// Loop da aplicação - "game loop"
@@ -105,7 +98,7 @@ int main()
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
+		
 		// Chamada de desenho - drawcall
 		// Contorno - Loop de linhas - GL_LINE_LOOP
 		shader.setVec4("inputColor", 1.0, 1.0, 0.0, 1.0);
@@ -114,10 +107,10 @@ int main()
 		glDrawArrays(GL_LINE_LOOP, 3, 3);
 
 		// Chamada de desenho - drawcall
-		// Pontos - GL_POINTS
-		shader.setVec4("inputColor", 1.0, 1.0, 1.0, 1.0);
+		// PONTOS - GL_POINTS
+		shader.setVec4("inputColor", 1.0, 0.0, 1.0, 1.0);
 		glDrawArrays(GL_POINTS, 0, 6);
-
+		
 		glBindVertexArray(0); //Desconectando o buffer de geometria
 
 		// Troca os buffers da tela
@@ -154,11 +147,11 @@ int setupGeometry()
 		//x   y     z
 		-0.5,  0.5, 0.0, //v0
 		 0.0,  0.0, 0.0, //v1
-		 0.5,  0.5, 0.0, //v2
+ 		 0.5,  0.5, 0.0, //v2 
 
- 		 0.0,  0.0, 0.0, //v3
-		-0.5, -0.5, 0.0, //V4
-		 0.5, -0.5, 0.0, //v5
+		 0.0,  0.0, 0.0, //v3
+		-0.5, -0.5, 0.0, //v4
+		 0.5, -0.5, 0.0, //v5 
 	};
 
 	GLuint VBO, VAO;

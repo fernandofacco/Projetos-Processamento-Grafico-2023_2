@@ -14,7 +14,7 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{5d81aa39-9ef0-4bb3-9140-4396aecdf26d}</UniqueIdentifier>
+      <UniqueIdentifier>{d2d65f51-99e7-4492-94c5-5658c8357dc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

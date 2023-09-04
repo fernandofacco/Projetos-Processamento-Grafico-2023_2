@@ -13,15 +13,8 @@
 
 using namespace std;
 
-// GLAD
-//#include <glad/glad.h> - Desnecessário, já presente em Shader.h
-
-// GLFW
-//#include <GLFW/glfw3.h> - Desnecessário, já presente em Shader.h
-
-// Classe para manipulação dos shaders
+//Classe para manipulação dos shaders
 #include "Shader.h"
-
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -52,7 +45,7 @@ int main()
 //#endif
 
 	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello Triangle-Fernando Facco Rodrigues!", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo! -- Rossana", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Fazendo o registro da função de callback para a janela GLFW
@@ -83,7 +76,6 @@ int main()
 	// Gerando um buffer simples, com a geometria de um triângulo
 	GLuint VAO = setupGeometry();
 	
-
 	// Enviando a cor desejada (vec4) para o fragment shader
 	// Utilizamos a variáveis do tipo uniform em GLSL para armazenar esse tipo de info
 	// que não está nos buffers
@@ -149,6 +141,7 @@ int setupGeometry()
 		-0.5, -0.5, 0.0, //v0
 		 0.5, -0.5, 0.0, //v1
  		 0.0,  0.5, 0.0, //v2 
+
 	};
 
 	GLuint VBO, VAO;
