@@ -1,4 +1,4 @@
-# PG2023-2
+# Projetos Processamento Gráfico 2023_2
 
 Alguns projetos desenvolvidos para as aulas de Processamento Grãfico dos cursos de Ciência da Computação e Engenharia Biomédica da Unisinos.
 
