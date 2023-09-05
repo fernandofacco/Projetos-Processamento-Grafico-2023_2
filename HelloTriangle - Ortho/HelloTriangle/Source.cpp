@@ -1,4 +1,4 @@
-/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
+	/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
  *
  * Adaptado por Rossana Baptista Queiroz
  * para a disciplina de Processamento Gráfico - Unisinos
@@ -12,6 +12,12 @@
 #include <assert.h>
 
 using namespace std;
+
+
+// GLM - Graphics Library Math
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 //Classe para manipulação dos shaders
 #include "Shader.h"
@@ -66,8 +72,6 @@ int main()
 
 	// Definindo as dimensões da viewport com as mesmas dimensões da janela da aplicação
 	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
 
 
 	// Compilando e buildando o programa de shader
@@ -76,7 +80,13 @@ int main()
 	// Gerando um buffer simples, com a geometria de um triângulo
 	GLuint VAO = setupGeometry();
 		
+	glm::mat4 projection = glm::mat4(1); //matriz identidade
+	//projection = glm::ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	projection = glm::ortho(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
+
 	shader.Use();
+
+	shader.setMat4("projection", glm::value_ptr(projection));
 	
 	// Loop da aplicação - "game loop"
 	while (!glfwWindowShouldClose(window))
@@ -91,6 +101,11 @@ int main()
 		glLineWidth(10);
 		glPointSize(20);
 
+		//Recuperando o tamanho da janela da aplicação
+		glfwGetFramebufferSize(window, &width, &height);
+
+		//Dimensiona a viewport
+		glViewport(width / 2, height / 2, width, height);
 		glBindVertexArray(VAO); //Conectando ao buffer de geometria
 
 		shader.setVec4("inputColor", 0.0, 0.0, 1.0, 1.0); //enviando cor para variável uniform inputColor
@@ -110,7 +125,9 @@ int main()
 		// PONTOS - GL_POINTS
 		shader.setVec4("inputColor", 1.0, 0.0, 1.0, 1.0);
 		glDrawArrays(GL_POINTS, 0, 6);
-		
+
+		//Dimensiona a segunda viewport
+		glViewport(0, 0, width / 2, height / 2);
 		glBindVertexArray(0); //Desconectando o buffer de geometria
 
 		// Troca os buffers da tela
