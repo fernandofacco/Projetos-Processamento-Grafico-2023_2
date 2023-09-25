@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <assert.h>
 
 using namespace std;
@@ -92,7 +93,7 @@ int main()
 
 	shader.setMat4("projection", glm::value_ptr(projection));
 	
-	int texID = setupTexture("../../Textures/wall.jpeg");
+	int texID = setupTexture("../../Textures/wall.jpg");
 	shader.setInt("texbuffer", 0);
 
 	glActiveTexture(GL_TEXTURE0);
