@@ -32,6 +32,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // Protótipos das funções
 int setupGeometry();
 int setupTexture(string filePath);
+int setupSprite();
 
 // Dimensões da janela (pode ser alterado em tempo de execução)
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -84,6 +85,8 @@ int main()
 
 	// Gerando um buffer simples, com a geometria de um triângulo
 	GLuint VAO = setupGeometry();
+
+	GLuint sprite = setupSprite();
 		
 	glm::mat4 projection = glm::mat4(1); //matriz identidade
 	//projection = glm::ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
@@ -127,7 +130,7 @@ int main()
 		model = glm::translate(model, glm::vec3(400.0, 300.0, 0.0));
 		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0, 0.0, 1.0));
 		model = glm::rotate(model, angle, glm::vec3(0.0, 0.0, 1.0));
-		model = glm::scale(model, glm::vec3(300.0, 300.0, 1.0));
+		model = glm::scale(model, glm::vec3(32.0, 32.0, 1.0));
 
 		//Enviando a matriz de modelo para o shader
 		shader.setMat4("model", glm::value_ptr(model));
@@ -138,14 +141,8 @@ int main()
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
 		glBindTexture(GL_TEXTURE_2D, texID);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
-		// Chamada de desenho - drawcall
-		// Contorno - Loop de linhas - GL_LINE_LOOP
-		shader.setVec4("inputColor", 1.0, 1.0, 0.0, 1.0);
-		glDrawArrays(GL_LINE_LOOP, 0, 3);
-
-
 		// Chamada de desenho - drawcall
 		// PONTOS - GL_POINTS
 		shader.setVec4("inputColor", 1.0, 0.0, 1.0, 1.0);
@@ -269,4 +266,63 @@ int setupTexture(string filePath)
 		return -1;
 	}
 	return texID;
+}
+
+int setupSprite()
+{
+	// Aqui setamos as coordenadas x, y e z do triângulo e as armazenamos de forma
+	// sequencial, já visando mandar para o VBO (Vertex Buffer Objects)
+	// Cada atributo do vértice (coordenada, cores, coordenadas de textura, normal, etc)
+	// Pode ser arazenado em um VBO único ou em VBOs separados
+	GLfloat vertices[] = {
+		// Primeiro Triangulo
+
+		//x   y     z    s    t
+		-0.5, -0.5, 0.0, 0.0, 0.0, //v0
+		 0.5,  0.5, 0.0, 1.0, 1.0, //v1
+		-0.5,  0.5, 0.0, 0.0, 1.0, //v2
+
+		 // Segundo Triangulo
+		-0.5, -0.5, 0.0, 0.0, 0.0, //v0
+		 0.0,  0.5, 0.0, 0.5, 1.0,  //v1  
+		 0.5,  0.5, 0.0, 1.0, 1.0, //v2
+	};
+
+	GLuint VBO, VAO;
+	//Geração do identificador do VBO
+	glGenBuffers(1, &VBO);
+	//Faz a conexão (vincula) do buffer como um buffer de array
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//Envia os dados do array de floats para o buffer da OpenGl
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	//Geração do identificador do VAO (Vertex Array Object)
+	glGenVertexArrays(1, &VAO);
+	// Vincula (bind) o VAO primeiro, e em seguida  conecta e seta o(s) buffer(s) de vértices
+	// e os ponteiros para os atributos 
+	glBindVertexArray(VAO);
+	//Para cada atributo do vertice, criamos um "AttribPointer" (ponteiro para o atributo), indicando: 
+	// Localização no shader * (a localização dos atributos devem ser correspondentes no layout especificado no vertex shader)
+	// Numero de valores que o atributo tem (por ex, 3 coordenadas xyz) 
+	// Tipo do dado
+	// Se está normalizado (entre zero e um)
+	// Tamanho em bytes 
+	// Deslocamento a partir do byte zero 
+
+	// Atributo posição
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// Atributo coordenada de textura
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GL_FLOAT)));
+	glEnableVertexAttribArray(1);
+
+	// Observe que isso é permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de vértice 
+	// atualmente vinculado - para que depois possamos desvincular com segurança
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	// Desvincula o VAO (é uma boa prática desvincular qualquer buffer ou array para evitar bugs medonhos)
+	glBindVertexArray(0);
+
+	return VAO;
 }
