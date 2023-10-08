@@ -1,12 +1,3 @@
-	/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
- *
- * Adaptado por Rossana Baptista Queiroz
- * para a disciplina de Processamento Gráfico - Unisinos
- * Versão inicial: 7/4/2017
- * Última atualização em 14/08/2023
- *
- */
-
 #include <iostream>
 #include <string>
 #include <assert.h>
@@ -81,8 +72,8 @@ int main()
 	GLuint VAO = setupGeometry();
 		
 	glm::mat4 projection = glm::mat4(1); //matriz identidade
-	//projection = glm::ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
-	projection = glm::ortho(0.0, 800.0, 0.0, 600.0, -5.0, 5.0);
+	projection = glm::ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+	//projection = glm::ortho(0.0, 800.0, 0.0, 600.0, -5.0, 5.0);
 
 	shader.Use();
 
@@ -104,31 +95,41 @@ int main()
 		//Recuperando o tamanho da janela da aplicação
 		glfwGetFramebufferSize(window, &width, &height);
 
-		//Dimensiona a viewport
-		glViewport(0, 0, width, height);
+		//Dimensiona a viewport - Superior Esquerdo
+		glViewport(0, height / 2, width / 2, height / 2);
 		glBindVertexArray(VAO); //Conectando ao buffer de geometria
-
-		shader.setVec4("inputColor", 0.0, 0.0, 1.0, 1.0); //enviando cor para variável uniform inputColor
 
 		// Chamada de desenho - drawcall
 		// Poligono Preenchido - GL_TRIANGLES
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		
-		// Chamada de desenho - drawcall
-		// Contorno - Loop de linhas - GL_LINE_LOOP
-		shader.setVec4("inputColor", 1.0, 1.0, 0.0, 1.0);
-		glDrawArrays(GL_LINE_LOOP, 0, 3);
-		shader.setVec4("inputColor", 0.0, 1.0, 1.0, 1.0);
-		glDrawArrays(GL_LINE_LOOP, 3, 3);
+		shader.setVec4("inputColor", 1.0, 1.0, 1.0, 1.0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		//Dimensiona a viewport - Superior Direito
+		glViewport(width/2, height/2, width/2, height/2);
+		glBindVertexArray(VAO); //Conectando ao buffer de geometria
 
 		// Chamada de desenho - drawcall
-		// PONTOS - GL_POINTS
-		shader.setVec4("inputColor", 1.0, 0.0, 1.0, 1.0);
-		glDrawArrays(GL_POINTS, 0, 6);
+		// Poligono Preenchido - GL_TRIANGLES
+		shader.setVec4("inputColor", 1.0, 1.0, 1.0, 1.0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		//Dimensiona a segunda viewport
+		//Dimensiona a viewport - Inferior Esquerdo
 		glViewport(0, 0, width / 2, height / 2);
-		glBindVertexArray(0); //Desconectando o buffer de geometria
+		glBindVertexArray(VAO); //Conectando ao buffer de geometria
+
+		// Chamada de desenho - drawcall
+		// Poligono Preenchido - GL_TRIANGLES
+		shader.setVec4("inputColor", 1.0, 1.0, 1.0, 1.0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		//Dimensiona a viewport - Inferior Direito
+		glViewport(width / 2, 0, width / 2, height / 2);
+		glBindVertexArray(VAO); //Conectando ao buffer de geometria
+
+		// Chamada de desenho - drawcall
+		// Poligono Preenchido - GL_TRIANGLES
+		shader.setVec4("inputColor", 1.0, 1.0, 1.0, 1.0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Troca os buffers da tela
 		glfwSwapBuffers(window);
@@ -161,14 +162,10 @@ int setupGeometry()
 	// Cada atributo do vértice (coordenada, cores, coordenadas de textura, normal, etc)
 	// Pode ser arazenado em um VBO único ou em VBOs separados
 	GLfloat vertices[] = {
-		//x   y     z
-		-0.5,  0.5, 0.0, //v0
-		 0.0,  0.0, 0.0, //v1
- 		 0.5,  0.5, 0.0, //v2 
-
-		 0.0,  0.0, 0.0, //v3
-		-0.5, -0.5, 0.0, //v4
-		 0.5, -0.5, 0.0, //v5 
+		//x    y     z
+		 0.0,  5.0,  0.0, //v3
+		-5.0, -5.0,  0.0, //v4
+		 5.0, -5.0,  0.0, //v5 
 	};
 
 	GLuint VBO, VAO;
