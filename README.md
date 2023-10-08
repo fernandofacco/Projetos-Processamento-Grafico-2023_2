@@ -1,6 +1,6 @@
 # Projetos Processamento Gráfico 2023_2
 
-Alguns projetos desenvolvidos para as aulas de Processamento Gráfico do curso de Ciência da Computação da Unisinos.
+Alguns projetos desenvolvidos durante as aulas de Processamento Gráfico do curso de Ciência da Computação da Unisinos.
 
 As dependências estão pré-compiladas para Windows 10 32-bits e compilador do Visual Studio 2019/2022
 Se o seu ambiente de desenvolvimento for diferente, você deve baixar:
