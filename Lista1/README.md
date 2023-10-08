@@ -1,6 +1,6 @@
 # Lista 1 #
 
-### 1. O que é a GLSL? Quais os dois tipos de shaders são obrigatórios no pipeline programável da versão atual que trabalhamos em aula e o que eles processam? ###
+# 1. O que é a GLSL? Quais os dois tipos de shaders são obrigatórios no pipeline programável da versão atual que trabalhamos em aula e o que eles processam? #
    GLSL - É uma linguagem parecida com C utilizada para programar os shaders. Os dois tipos de shaders obrigátorios são: vertex shader e fragment shader.
    Vertex Shader - Responsável por processar cada vértice separadamente.
    Fragment Shader - Responsável por processar fragmento cada separadamente.
