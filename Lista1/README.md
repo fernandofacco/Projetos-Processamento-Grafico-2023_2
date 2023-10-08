@@ -17,7 +17,7 @@
 
 6. Faça o desenho de 2 triângulos na tela. Desenhe eles:
 a. Apenas com o polígono preenchido
-![5a](https://github.com/fernandofacco/Projetos-Processamento-Grafico-2023_2/assets/88943228/8bd8e34a-54a5-4c77-add3-370084a2a7a8)
+![5a]([https://github.com/fernandofacco/Projetos-Processamento-Grafico-2023_2/assets/88943228/8bd8e34a-54a5-4c77-add3-370084a2a7a8](https://github.com/fernandofacco/Projetos-Processamento-Grafico-2023_2/blob/main/Lista1/Prints/5a.jpg))
 
 
 b. Apenas com contorno
