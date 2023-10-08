@@ -19,25 +19,35 @@
 a. Apenas com o polígono preenchido
 ![image](/Lista1/Prints/5a.jpg)
 
-
 b. Apenas com contorno
+![image](/Lista1/Prints/5b.jpg)
 
 c. Apenas como pontos
+![image](/Lista1/Prints/5c.jpg)
 
 d. Com as 3 formas de desenho juntas
+![image](/Lista1/Prints/5d.jpg)
 
 6. Faça o desenho de um círculo na tela, utilizando a equação paramétrica do círculo para gerar os vértices. Depois disso:
+![image](/Lista1/Prints/6.jpg)
 
 a) Desenhe um octágono
+![image](/Lista1/Prints/6a.jpg)
 
 b) Desenhe um pentágono
+![image](/Lista1/Prints/6b.jpg)
 
 c) Desenhe um pac-man!
+![image](/Lista1/Prints/6c.jpg)
 
 d) Desenhe uma fatia de pizza
+![image](/Lista1/Prints/6d.jpg)
 
 e) DESAFIO: desenhe uma “estrela”
+![image](/Lista1/Prints/6e.jpg)
 
 7. Desenhe uma espiral:
+![image](/Lista1/Prints/7.jpg)
 
 8. Considerando o seguinte triângulo abaixo, formado pelos vértices P1, P2 e P3, respectivamente com as cores vermelho, verde e azul.
+![image](/Lista1/Prints/8.jpg)
