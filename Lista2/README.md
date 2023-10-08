@@ -16,7 +16,4 @@
 ![image](/Lista2/Prints/4.jpg)
 
 ### 5. Agora, desenhe a mesma cena nos 4 quadrantes. ###
-![image](/Lista2/Prints/4.jpg)
-
-### 8. Considerando o seguinte triângulo abaixo, formado pelos vértices P1, P2 e P3, respectivamente com as cores vermelho, verde e azul. ###
 ![image](/Lista2/Prints/5.jpg)
