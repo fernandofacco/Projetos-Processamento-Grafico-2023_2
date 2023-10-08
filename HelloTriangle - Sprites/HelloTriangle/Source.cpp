@@ -1,4 +1,4 @@
-	/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
+/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
  *
  * Adaptado por Rossana Baptista Queiroz
  * para a disciplina de Processamento Gráfico - Unisinos
@@ -15,27 +15,32 @@
 using namespace std;
 
 
-// GLM - Graphics Library Math
+// GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// STB_IMAGE
+//STB_IMAGE
 #include <stb_image.h>
 
 //Classe para manipulação dos shaders
 #include "Shader.h"
+
+//Classe sprite 
+#include "Sprite.h"
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Protótipos das funções
 int setupGeometry();
-int setupTexture(string filePath);
+int setupTexture(string filePath, int &width, int &height);
 int setupSprite();
 
 // Dimensões da janela (pode ser alterado em tempo de execução)
 const GLuint WIDTH = 800, HEIGHT = 600;
+
+Sprite personagem;
 
 // Função MAIN
 int main()
@@ -57,7 +62,7 @@ int main()
 //#endif
 
 	// Criação da janela GLFW
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo! - Fernando", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Ola Triangulo! -- Fernando", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	// Fazendo o registro da função de callback para a janela GLFW
@@ -78,28 +83,52 @@ int main()
 
 	// Definindo as dimensões da viewport com as mesmas dimensões da janela da aplicação
 	int width, height;
+	
 
 
 	// Compilando e buildando o programa de shader
 	Shader shader("../shaders/helloTriangle.vs", "../shaders/helloTriangle.fs");
 
-	// Gerando um buffer simples, com a geometria de um triângulo
-	GLuint VAO = setupGeometry();
-
-	GLuint sprite = setupSprite();
-		
-	glm::mat4 projection = glm::mat4(1); //matriz identidade
-	//projection = glm::ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
-	projection = glm::ortho(0.0, 800.0, 0.0, 600.0, -5.0, 5.0);
-
 	shader.Use();
 
-	shader.setMat4("projection", glm::value_ptr(projection));
+	//Fazendo a leitura da textura do personagem
+	int sprWidth, sprHeight;
+	int texID = setupTexture("../../Textures/characters/PNG/Knight/walk.png", sprWidth, sprHeight);
+
+	int sprWidth2, sprHeight2;
+	int texID2 = setupTexture("../../Textures/backgrounds/PNG/Postapocalypce1/Bright/postapocalypse1.png", sprWidth2, sprHeight2);
+
+	// Criando a instância de nosso objeto sprite do Personagem
+	personagem.initialize(1,6);
+	personagem.setPosition(glm::vec3(400.0, 300.0, 0.0));
+	personagem.setDimensions(glm::vec3(sprWidth/6, sprHeight, 1.0));
+	personagem.setShader(&shader);
+	personagem.setTexID(texID);
+
+	//Criando a instância de nosso objeto sprite do fundo (background)
+	Sprite background;
+	background.initialize(1,1);
+	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
+	background.setDimensions(glm::vec3(sprWidth2, sprHeight2, 1.0));
+	background.setShader(&shader);
+	background.setTexID(texID2);
+
+	//Cria a matriz de projeção paralela ortogáfica
+	glm::mat4 projection = glm::mat4(1); //matriz identidade
+	projection = glm::ortho(0.0, 800.0, 0.0, 600.0, -1.0, 1.0);
 	
-	int texID = setupTexture("../../Textures/wall.jpg");
+	shader.setMat4("projection", glm::value_ptr(projection));
 	shader.setInt("texbuffer", 0);
 
 	glActiveTexture(GL_TEXTURE0);
+
+	//Habilitando a transparência
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Habilitando o teste de profundidade
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_ALWAYS);
 
 	// Loop da aplicação - "game loop"
 	while (!glfwWindowShouldClose(window))
@@ -109,54 +138,33 @@ int main()
 
 		// Limpa o buffer de cor
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //cor de fundo
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 		glLineWidth(10);
 		glPointSize(20);
 
-		//Recuperando o tamanho da janela da aplicação
+		// Recuperando o tamanho da janela da aplicação
 		glfwGetFramebufferSize(window, &width, &height);
-
-		//Dimensiona a viewport
+		// Dimensiona a viewport
 		glViewport(0, 0, width, height);
-		glBindVertexArray(VAO); //Conectando ao buffer de geometria
-
-		//Matriz de transformações no objeto - Matriz de modelo
-		glm::mat4 model = glm::mat4(1); //Matriz identidade
-
-		float angle = (float)glfwGetTime();
-
-		//Aplicando as transformações
-		model = glm::translate(model, glm::vec3(400.0, 300.0, 0.0));
-		//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0, 0.0, 1.0));
-		model = glm::rotate(model, angle, glm::vec3(0.0, 0.0, 1.0));
-		model = glm::scale(model, glm::vec3(32.0, 32.0, 1.0));
-
-		//Enviando a matriz de modelo para o shader
-		shader.setMat4("model", glm::value_ptr(model));
-
-		shader.setVec4("inputColor", 0.0, 0.0, 1.0, 1.0); //enviando cor para variável uniform inputColor
-
-
-		// Chamada de desenho - drawcall
-		// Poligono Preenchido - GL_TRIANGLES
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
-		// Chamada de desenho - drawcall
-		// PONTOS - GL_POINTS
-		shader.setVec4("inputColor", 1.0, 0.0, 1.0, 1.0);
-		glDrawArrays(GL_POINTS, 0, 3);
 
-		//Dimensiona a segunda viewport
-		glViewport(0, 0, width / 2, height / 2);
-		glBindVertexArray(VAO); //Desconectando o buffer de geometria
+		//-------------------------------------------------------------
+		background.update();
+		background.draw();
+		//-------------------------------------------------------------
+
+
+		//-------------------------------------------------------------
+		personagem.update();
+		personagem.draw();
+		//--------------------------------------------------------------
+		
 
 		// Troca os buffers da tela
 		glfwSwapBuffers(window);
 	}
-	// Pede pra OpenGL desalocar os buffers
-	glDeleteVertexArrays(1, &VAO);
+
 	// Finaliza a execução da GLFW, limpando os recursos alocados por ela
 	glfwTerminate();
 	return 0;
@@ -169,6 +177,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	if ( key == GLFW_KEY_A || key == GLFW_KEY_LEFT )
+	{
+		personagem.moveLeft();
+	}
+	if ( key == GLFW_KEY_D || key == GLFW_KEY_RIGHT )
+	{
+		personagem.moveRight();
+	}
 }
 
 // Esta função está bastante harcoded - objetivo é criar os buffers que armazenam a 
@@ -183,10 +200,10 @@ int setupGeometry()
 	// Cada atributo do vértice (coordenada, cores, coordenadas de textura, normal, etc)
 	// Pode ser arazenado em um VBO único ou em VBOs separados
 	GLfloat vertices[] = {
-		//x   y     z    s    t
-		-0.5, -0.5, 0.0, 0.0, 0.0, //v0
-		 0.5, -0.5, 0.0, 1.0, 0.0, //v1
- 		 0.0,  0.5, 0.0, 0.5, 1.0  //v2  
+		//x   y     z    s    t   
+		-0.5, -0.5, 0.0, 0.0, 0.0,//v0
+		 0.5, -0.5, 0.0, 1.0, 0.0,//v1
+ 		 0.0,  0.5, 0.0, 0.5, 1.0 //v2 
 	};
 
 	GLuint VBO, VAO;
@@ -210,12 +227,12 @@ int setupGeometry()
 	// Tamanho em bytes 
 	// Deslocamento a partir do byte zero 
 
-	// Atributo posição
+	//Atributo posição
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	// Atributo coordenada de textura
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GL_FLOAT)));
+	//Atributo coordenada de textura 
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
 	// Observe que isso é permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de vértice 
@@ -228,28 +245,26 @@ int setupGeometry()
 	return VAO;
 }
 
-int setupTexture(string filePath)
+int setupTexture(string filePath, int &width, int &height)
 {
 	GLuint texID;
-
-	// Gera o identificador da textura na memória
+	// Geração do identificador do buffer
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
-	// Configurando parâmetro de wrapping da textura em s e t
+	//Configurando parâmetro de wrapping da textura em s e t
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// Configurando o parâmetro de filter e de magnificação e minificação da textura
+	
+	//Configurando o parâmetro de filtering de magnificação e minificação da textura
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
-
-	if (data) 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+	
+	int nrChannels;
+	unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels,0);
+	if (data)
 	{
-		if (nrChannels == 3) 
+		if (nrChannels == 3)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		}
@@ -257,14 +272,18 @@ int setupTexture(string filePath)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}
+
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		stbi_image_free(data);
+
 	}
-	else {
-		cout << "Erro ao gerar textura" << endl;
+	else
+	{
+		cout << "Erro ao ler a textura!" << endl;
 		return -1;
 	}
+	
 	return texID;
 }
 
@@ -275,17 +294,16 @@ int setupSprite()
 	// Cada atributo do vértice (coordenada, cores, coordenadas de textura, normal, etc)
 	// Pode ser arazenado em um VBO único ou em VBOs separados
 	GLfloat vertices[] = {
-		// Primeiro Triangulo
-
-		//x   y     z    s    t
+		//Primeiro Triângulo
+		//x   y     z    s    t   
 		-0.5, -0.5, 0.0, 0.0, 0.0, //v0
 		 0.5,  0.5, 0.0, 1.0, 1.0, //v1
 		-0.5,  0.5, 0.0, 0.0, 1.0, //v2
 
-		 // Segundo Triangulo
+		//Segundo Triângulo
 		-0.5, -0.5, 0.0, 0.0, 0.0, //v0
-		 0.0,  0.5, 0.0, 0.5, 1.0,  //v1  
-		 0.5,  0.5, 0.0, 1.0, 1.0, //v2
+		 0.5, -0.5, 0.0, 1.0, 0.0, //v3 
+		 0.5,  0.5, 0.0, 1.0, 1.0, //v1
 	};
 
 	GLuint VBO, VAO;
@@ -309,12 +327,12 @@ int setupSprite()
 	// Tamanho em bytes 
 	// Deslocamento a partir do byte zero 
 
-	// Atributo posição
+	//Atributo posição
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	// Atributo coordenada de textura
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GL_FLOAT)));
+	//Atributo coordenada de textura 
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
 	// Observe que isso é permitido, a chamada para glVertexAttribPointer registrou o VBO como o objeto de buffer de vértice 
@@ -326,3 +344,5 @@ int setupSprite()
 
 	return VAO;
 }
+
+
