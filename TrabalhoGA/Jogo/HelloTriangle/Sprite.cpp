@@ -3,7 +3,7 @@
 Sprite::Sprite()
 {
 	//Inicializar outros atributos
-	vel = 15;
+	vel = 25;
 }
 
 Sprite::~Sprite()
@@ -115,28 +115,28 @@ void Sprite::draw()
 
 void Sprite::moveLeft()
 {
-	if (position.x > 0) {
+	if (position.x > 0 + 25) {
 		position.x -= vel;
 	}
 }
 
 void Sprite::moveRight()
 {
-	if (position.x < 1440) {
+	if (position.x < 1440 - 25) {
 		position.x += vel;
 	}
 }
 
 void Sprite::moveUp()
 {
-	if (position.y < 900) {
+	if (position.y < 900 - 25) {
 		position.y += vel;
 	}
 }
 
 void Sprite::moveDown()
 {
-	if (position.y > 0) {
+	if (position.y > 0 + 90) {
 		position.y -= vel;
 	}
 }

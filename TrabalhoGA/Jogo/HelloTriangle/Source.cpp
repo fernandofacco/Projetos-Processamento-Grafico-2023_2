@@ -20,6 +20,7 @@ using namespace std;
 //Classe Sprite 
 #include "Sprite.h"
 
+//Classe Enemy
 #include "Enemy.h"
 
 //Classe Timer
@@ -28,18 +29,19 @@ using namespace std;
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-bool checkCollision(Sprite& object1, Enemy& object2);
-
 // Protótipos das funções
 int setupGeometry();
 int setupTexture(string filePath, int &width, int &height);
 int setupSprite();
+bool checkCollision(Sprite& object1, Enemy& object2);
 
 // Dimensões da janela (pode ser alterado em tempo de execução)
 const GLuint WIDTH = 1440, HEIGHT = 900;
 
 Sprite personagem; 
-// Object meuArrayFixo[100];
+
+int quantInimigos = 20;
+int tempoSpawnInimigo = 3;
 
 // Função MAIN
 int main()
@@ -94,24 +96,23 @@ int main()
 
 	//Fazendo a leitura da textura do personagem
 	int sprWidth, sprHeight;
-	int texID = setupTexture("../../Textures/characters/knight/Knight_1/Run.png", sprWidth, sprHeight);
+	int texID = setupTexture("../../Textures/characters/samurai/Samurai/Run.png", sprWidth, sprHeight);
 
 	int sprWidth2, sprHeight2;
-	int texID2 = setupTexture("../../Textures/characters/werewolf/Black_Werewolf/walk.png", sprWidth2, sprHeight2);
+	int texID2 = setupTexture("../../Textures/characters/shuriken.png", sprWidth2, sprHeight2);
 
 	int sprWidth3, sprHeight3;
-	int texID3 = setupTexture("../../Textures/backgrounds/PNG/Battleground1/Bright/Battleground1.png", sprWidth3, sprHeight3);
+	int texID3 = setupTexture("../../Textures/backgrounds/PNG/Battleground3/Bright/Battleground3.png", sprWidth3, sprHeight3);
 
 	// Criando a instância de nosso objeto sprite do Personagem
-	personagem.initialize(1, 7);
-	personagem.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	personagem.setDimensions(glm::vec3(sprWidth/7 , sprHeight, 1.0));
+	personagem.initialize(1, 8);
+	personagem.setPosition(glm::vec3(720.0, 450.0, 0.0));
+	personagem.setDimensions(glm::vec3(sprWidth/6 , sprHeight*1.5, 1.0));
 	personagem.setShader(&shader);
 	personagem.setTexID(texID);
 
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < quantInimigos; i++) {
 		int canto = std::rand() % 4; // 0: cima, 1: direita, 2: baixo, 3: esquerda
 		int randomXAxis = 0;
 		int randomYAxis = 0;
@@ -136,26 +137,19 @@ int main()
 		}
 
 		Enemy enemy;
-		enemy.initialize(1, 11);
+		enemy.initialize(1, 1);
 		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 1.0));
-		enemy.setDimensions(glm::vec3(sprWidth2/11, sprHeight2, 1.0));
+		enemy.setDimensions(glm::vec3(sprWidth2/5 , sprHeight2/5, 1.0));
 		enemy.setShader(&shader);
 		enemy.setTexID(texID2);
 		vetorInimigos.push_back(enemy);
 	}
 
-	/*Enemy enemy;
-	enemy.initialize(1, 11);
-	enemy.setPosition(glm::vec3(50, 50, 1.0));
-	enemy.setDimensions(glm::vec3(sprWidth2 / 11, sprHeight2, 1.0));
-	enemy.setShader(&shader);
-	enemy.setTexID(texID2);
-	*/
 	//Criando a instância de nosso objeto sprite do fundo (background)
 	Sprite background;
 	background.initialize(1,1);
-	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	background.setDimensions(glm::vec3(sprWidth3+200, sprHeight3+200, 1.0));
+	background.setPosition(glm::vec3(720.0, 450.0 , 0.0));
+	background.setDimensions(glm::vec3(sprWidth3, sprHeight3, 1.0));
 	background.setShader(&shader);
 	background.setTexID(texID3);	
 
@@ -213,7 +207,7 @@ int main()
 		//-------------------------------------------------------------
 
 		// Criar inimigos a cada X segundos
-		if (elapsedTime >= 2.0) {
+		if (elapsedTime >= tempoSpawnInimigo) {
 			contador++; 
 			startTime = currentTime; 
 		}
@@ -226,12 +220,6 @@ int main()
 				glfwSetWindowShouldClose(window, GL_TRUE);
 			}
 		}
-
-		/*enemy.update();
-		enemy.draw();
-		if (checkCollision(personagem, enemy)) {
-			glfwSetWindowShouldClose(window, GL_TRUE);
-		}*/
 		//--------------------------------------------------------------
 
 		timer.finish();
@@ -450,8 +438,8 @@ bool checkCollision(Sprite& object1, Enemy& object2) {
 	glm::vec3 size2 = object2.getDimensions();
 
 	// Verifica se ocorre colisão com base nas coordenadas das bounding boxes
-	if (pos1.x + (size1.x * 0.3) > pos2.x && pos1.x < pos2.x + (size2.x * 0.2) &&
-		pos1.y + (size1.y * 0.3) > pos2.y && pos1.y < pos2.y + (size2.y * 0.2)) {
+	if (pos1.x + (size1.x * 0.3) > pos2.x&& pos1.x < pos2.x + (size2.x * 0.3) &&
+		pos1.y + (size1.y * 0.3) > pos2.y&& pos1.y < pos2.y + (size2.y * 0.3)) {
 		// Colisão detectada
 		return true;
 	}

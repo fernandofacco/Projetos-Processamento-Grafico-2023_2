@@ -3,7 +3,7 @@
 Enemy::Enemy()
 {
 	//Inicializar outros atributos
-	vel = 5;
+	vel = 15;
 }
 
 Enemy::~Enemy()
@@ -126,11 +126,12 @@ void Enemy::update()
 
 	//Conecta com o VAO
 	glBindVertexArray(VAO);
-
+	float time = (float)glfwGetTime();
 	//Altera a matriz a transformação
 	glm::mat4 model = glm::mat4(1); //matriz identidade
 	//Aplicando as transformações
 	model = glm::translate(model, position);
+	model = glm::rotate(model, time * 50, glm::vec3(0.0, 0.0, 1.0));
 
 	if (direcao == MOVING_TOP_LEFT || direcao == MOVING_DOWN_LEFT) scaleFactor = glm::vec3(-dimensions.x, dimensions.y, dimensions.z);
 	else if (direcao == MOVING_TOP_RIGHT || direcao == MOVING_DOWN_RIGHT) scaleFactor = dimensions;
