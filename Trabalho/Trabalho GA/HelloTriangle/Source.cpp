@@ -1,12 +1,3 @@
-/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle 
- *
- * Adaptado por Rossana Baptista Queiroz
- * para a disciplina de Processamento Gráfico - Unisinos
- * Versão inicial: 7/4/2017
- * Última atualização em 14/08/2023
- *
- */
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -36,6 +27,7 @@ using namespace std;
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+// void criarObjeto(Shader shader, int texID, int sprWidth, int sprHeight, int i);
 
 // Protótipos das funções
 int setupGeometry();
@@ -46,13 +38,15 @@ int setupSprite();
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 Sprite personagem; 
-Object meuArrayFixo[100];
+// Object meuArrayFixo[100];
+
 // Função MAIN
 int main()
 {
 	// Inicialização da GLFW
 	glfwInit();
-
+	std::vector<Object> vetorObjetos;
+	vetorObjetos.reserve(100);
 	//Muita atenção aqui: alguns ambientes não aceitam essas configurações
 	//Você deve adaptar para a versão do OpenGL suportada por sua placa
 	//Sugestão: comente essas linhas de código para desobrir a versão e
@@ -111,14 +105,21 @@ int main()
 	personagem.setShader(&shader);
 	personagem.setTexID(texID);
 
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
 	for (int i = 0; i < 10; i++) {
+		int randomNumber = std::rand();
+		int randomXAxysInRange = 50 + (randomNumber % (750 - 50 + 1));
+		randomNumber = std::rand();
+		int randomYAxysInRange = 50 + (randomNumber % (550 - 50 + 1));
 		Object object;
-		object.initialize(1, 6);
-		object.setPosition(glm::vec3((50+i) * i, 600, 0.0));
+		object.initialize(1, 6, randomNumber % 4);
+		//object.setPosition(glm::vec3(randomInRange, 600 + i * 100, 0.0));
+		object.setPosition(glm::vec3(randomXAxysInRange, randomYAxysInRange, 0.0));
 		object.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
 		object.setShader(&shader);
 		object.setTexID(texID3);
-		meuArrayFixo[i] = object;
+		vetorObjetos.push_back(object);
 	}
 
 	//Criando a instância de nosso objeto sprite do fundo (background)
@@ -127,7 +128,7 @@ int main()
 	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
 	background.setDimensions(glm::vec3(sprWidth2, sprHeight2, 1.0));
 	background.setShader(&shader);
-	//background.setTexID(texID2);
+	//background.setTexID(texID2);	
 
 
 	//Cria a matriz de projeção paralela ortogáfica
@@ -150,6 +151,8 @@ int main()
 	clock_t inicio = clock();
 	int quantObjects = 0;
 	Timer timer;
+
+	std::time_t startTime = std::time(nullptr);
 	// Loop da aplicação - "game loop"
 	while (!glfwWindowShouldClose(window))
 	{
@@ -168,17 +171,7 @@ int main()
 		glfwGetFramebufferSize(window, &width, &height);
 		// Dimensiona a viewport
 		glViewport(0, 0, width, height);
-	
-		/*for (int i = 0; i < quantObjects; i++) {
-			Object object;
-			object.initialize(1, 6);
-			object.setPosition(glm::vec3(50 * 5, 400, 0.0));
-			object.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
-			object.setShader(&shader);
-			object.setTexID(texID3);
-			meuArrayFixo[i] = object;
-			quantObjects++;
-		}*/
+
 		//-------------------------------------------------------------
 		background.update();
 		background.draw();
@@ -186,12 +179,11 @@ int main()
 		personagem.update();
 		personagem.draw();
 
-		for (int i = 0; i < 10; i++) {
-			meuArrayFixo[i].update();
-			meuArrayFixo[i].draw();
+		for (int i = 0; i < vetorObjetos.size(); i++) {
+			vetorObjetos[i].update();
+			vetorObjetos[i].draw();
 		}
 		//--------------------------------------------------------------
-		
 
 		timer.finish();
 		double waitingTime = timer.calcWaitingTime(24, timer.getElapsedTimeMs());
@@ -222,10 +214,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		personagem.setState(MOVING_LEFT);
 		personagem.moveLeft();
 	}
-	else if ( key == GLFW_KEY_D || key == GLFW_KEY_RIGHT )
+	if ( key == GLFW_KEY_D || key == GLFW_KEY_RIGHT )
 	{
 		personagem.setState(MOVING_RIGHT);	
 		personagem.moveRight();
+	}
+	if (key == GLFW_KEY_W|| key == GLFW_KEY_UP)
+	{
+		personagem.setState(MOVING_UP);
+		personagem.moveUp();
+	}
+	if (key == GLFW_KEY_S || key == GLFW_KEY_DOWN)
+	{
+		personagem.setState(MOVING_DOWN);
+		personagem.moveDown();
 	}
 	if (action == GLFW_RELEASE) //soltou a tecla
 	{

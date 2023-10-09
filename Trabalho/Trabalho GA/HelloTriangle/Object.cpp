@@ -3,7 +3,7 @@
 Object::Object()
 {
 	//Inicializar outros atributos
-	vel = 1;
+	vel = 5;
 }
 
 Object::~Object()
@@ -12,7 +12,7 @@ Object::~Object()
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void Object::initialize(int nAnimations, int nFrames)
+void Object::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
 {
 	this->nAnimations = nAnimations;
 	this->nFrames = nFrames;
@@ -59,12 +59,87 @@ void Object::initialize(int nAnimations, int nFrames)
 
 	glBindVertexArray(0);
 
-
+	// Converta o número aleatório em uma direção
+	switch (randomDirectionNumber) {
+		case 0:
+			direcao = MOVING_TOP_RIGHT;
+			break;
+		case 1:
+			direcao = MOVING_TOP_LEFT;
+			break;
+		case 2:
+			direcao = MOVING_DOWN_RIGHT;
+			break;
+		case 3:
+			direcao = MOVING_DOWN_LEFT;
+			break;
+		default:
+			std::cerr << "Erro: Valor aleatório fora do intervalo esperado." << std::endl;
+	}
 }
 
 void Object::update()
 {
-	moveDown();
+	switch (direcao) {
+		case MOVING_TOP_RIGHT:
+			moveTopRight();
+			if (position.y >= 600) {
+				direcao = MOVING_DOWN_RIGHT;
+			}
+			if (position.x >= 800) {
+				direcao = MOVING_TOP_LEFT;
+			}
+			break;
+		case MOVING_TOP_LEFT:
+			moveTopLeft();
+			if (position.y >= 600) {
+				direcao = MOVING_DOWN_LEFT;
+			}
+			if (position.x <= 0) {
+				direcao = MOVING_TOP_RIGHT;
+			}
+			break;
+		case MOVING_DOWN_RIGHT:
+			moveDownRight();
+			if (position.y <= 0) {
+				direcao = MOVING_TOP_RIGHT;
+			}
+			if (position.x >= 800) {
+				direcao = MOVING_DOWN_LEFT;
+			}
+			break;
+		case MOVING_DOWN_LEFT:
+			moveDownLeft();
+			if (position.y <= 0) {
+				direcao = MOVING_TOP_LEFT;
+			}
+			if (position.x <= 0) {
+				direcao = MOVING_DOWN_RIGHT;
+			}
+			break;
+		default:
+			break;
+	}
+	/*if (direcao == MOVING_TOP_RIGHT)
+	{
+		moveDown();
+
+		// Verifique se atingiu o limite superior da tela e, se sim, mude a direção.
+		if (position.y <= 0)
+		{
+			indoParaBaixo = false;
+		}
+	}
+	else if (indoParaBaixo == false)
+	{
+		moveUp();
+
+		// Verifique se atingiu o limite inferior da tela e, se sim, mude a direção.
+		if (position.y >= 600)
+		{
+			indoParaBaixo = true;
+		}
+	}*/
 	//Conecta com o VAO
 	glBindVertexArray(VAO);
 
@@ -104,22 +179,26 @@ void Object::draw()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::moveLeft()
+void Object::moveTopLeft()
 {
 	position.x -= vel;
-}
-
-void Object::moveRight()
-{
-	position.x += vel;
-}
-
-void Object::moveUp()
-{
 	position.y += vel;
 }
 
-void Object::moveDown()
+void Object::moveTopRight()
 {
+	position.x += vel;
+	position.y += vel;
+}
+
+void Object::moveDownLeft()
+{
+	position.x -= vel;
+	position.y -= vel;
+}
+
+void Object::moveDownRight()
+{
+	position.x += vel;
 	position.y -= vel;
 }

@@ -6,15 +6,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <cstdlib>
+
 //Classe para manipulação dos shaders
 #include "Shader.h"
+
+enum direcao { MOVING_TOP_RIGHT, MOVING_TOP_LEFT, MOVING_DOWN_RIGHT, MOVING_DOWN_LEFT };
 
 class Object
 {
 public:
 	Object();
 	~Object();
-	void initialize(int nAnimations, int nFrames);
+	void initialize(int nAnimations, int nFrames, int randomDirectionNumber);
 	inline void setTexID(GLuint texID) { this->texID = texID; }
 
 	inline void setPosition(glm::vec3 position) { this->position = position; }
@@ -24,10 +28,10 @@ public:
 	void update();
 	void draw();
 
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	void moveTopLeft();
+	void moveTopRight();
+	void moveDownLeft();
+	void moveDownRight();
 
 protected:
 	GLuint VAO; //identificador do buffer de geometria
@@ -37,6 +41,7 @@ protected:
 	glm::vec3 position, dimensions, rotationAxis;
 	float angle;
 	float vel;
+	int direcao;
 
 	Shader* shader; //armazena o endereço do shader
 
