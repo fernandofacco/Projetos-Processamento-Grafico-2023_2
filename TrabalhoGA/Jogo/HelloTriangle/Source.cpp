@@ -75,7 +75,6 @@ int main()
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
-
 	}
 
 	// Obtendo as informações de versão
@@ -95,26 +94,24 @@ int main()
 
 	//Fazendo a leitura da textura do personagem
 	int sprWidth, sprHeight;
-	//int texID = setupTexture("../../Textures/characters/PNG/Knight/walk.png", sprWidth, sprHeight);
-	int texID = setupTexture("../../Textures/Run.png", sprWidth, sprHeight);
+	int texID = setupTexture("../../Textures/characters/knight/Knight_1/Run.png", sprWidth, sprHeight);
 
 	int sprWidth2, sprHeight2;
-	//int texID2 = setupTexture("../../Textures/characters/PNG/Mage/mage.png", sprWidth2, sprHeight2);
-	int texID2 = setupTexture("../../Textures/walk1.png", sprWidth2, sprHeight2);
+	int texID2 = setupTexture("../../Textures/characters/werewolf/Black_Werewolf/walk.png", sprWidth2, sprHeight2);
 
 	int sprWidth3, sprHeight3;
-	int texID3 = setupTexture("../../Textures/backgrounds/PNG/Postapocalypce1/Bright/postapocalypse1.png", sprWidth3, sprHeight3);
+	int texID3 = setupTexture("../../Textures/backgrounds/PNG/Battleground1/Bright/Battleground1.png", sprWidth3, sprHeight3);
 
 	// Criando a instância de nosso objeto sprite do Personagem
 	personagem.initialize(1, 7);
 	personagem.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	personagem.setDimensions(glm::vec3(sprWidth/7, sprHeight, 1.0));
+	personagem.setDimensions(glm::vec3(sprWidth/7 , sprHeight, 1.0));
 	personagem.setShader(&shader);
 	personagem.setTexID(texID);
 
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
 		int canto = std::rand() % 4; // 0: cima, 1: direita, 2: baixo, 3: esquerda
 		int randomXAxis = 0;
 		int randomYAxis = 0;
@@ -147,6 +144,13 @@ int main()
 		vetorInimigos.push_back(enemy);
 	}
 
+	/*Enemy enemy;
+	enemy.initialize(1, 11);
+	enemy.setPosition(glm::vec3(50, 50, 1.0));
+	enemy.setDimensions(glm::vec3(sprWidth2 / 11, sprHeight2, 1.0));
+	enemy.setShader(&shader);
+	enemy.setTexID(texID2);
+	*/
 	//Criando a instância de nosso objeto sprite do fundo (background)
 	Sprite background;
 	background.initialize(1,1);
@@ -154,7 +158,6 @@ int main()
 	background.setDimensions(glm::vec3(sprWidth3+200, sprHeight3+200, 1.0));
 	background.setShader(&shader);
 	background.setTexID(texID3);	
-
 
 	//Cria a matriz de projeção paralela ortogáfica
 	glm::mat4 projection = glm::mat4(1); //matriz identidade
@@ -223,6 +226,12 @@ int main()
 				glfwSetWindowShouldClose(window, GL_TRUE);
 			}
 		}
+
+		/*enemy.update();
+		enemy.draw();
+		if (checkCollision(personagem, enemy)) {
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		}*/
 		//--------------------------------------------------------------
 
 		timer.finish();
@@ -441,8 +450,8 @@ bool checkCollision(Sprite& object1, Enemy& object2) {
 	glm::vec3 size2 = object2.getDimensions();
 
 	// Verifica se ocorre colisão com base nas coordenadas das bounding boxes
-	if (pos1.x + (size1.x - 100) > pos2.x && pos1.x < pos2.x + (size2.x - 100) &&
-		pos1.y + (size1.y - 100) > pos2.y && pos1.y < pos2.y + (size2.y - 100)) {
+	if (pos1.x + (size1.x * 0.3) > pos2.x && pos1.x < pos2.x + (size2.x * 0.2) &&
+		pos1.y + (size1.y * 0.3) > pos2.y && pos1.y < pos2.y + (size2.y * 0.2)) {
 		// Colisão detectada
 		return true;
 	}
