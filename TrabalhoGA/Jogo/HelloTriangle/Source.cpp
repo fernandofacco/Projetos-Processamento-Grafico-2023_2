@@ -95,18 +95,20 @@ int main()
 
 	//Fazendo a leitura da textura do personagem
 	int sprWidth, sprHeight;
-	int texID = setupTexture("../../Textures/characters/PNG/Knight/walk.png", sprWidth, sprHeight);
+	//int texID = setupTexture("../../Textures/characters/PNG/Knight/walk.png", sprWidth, sprHeight);
+	int texID = setupTexture("../../Textures/Run.png", sprWidth, sprHeight);
 
 	int sprWidth2, sprHeight2;
-	int texID2 = setupTexture("../../Textures/backgrounds/PNG/Postapocalypce1/Bright/postapocalypse1.png", sprWidth2, sprHeight2);
+	//int texID2 = setupTexture("../../Textures/characters/PNG/Mage/mage.png", sprWidth2, sprHeight2);
+	int texID2 = setupTexture("../../Textures/walk1.png", sprWidth2, sprHeight2);
 
 	int sprWidth3, sprHeight3;
-	int texID3 = setupTexture("../../Textures/characters/PNG/Mage/mage.png", sprWidth3, sprHeight3);
+	int texID3 = setupTexture("../../Textures/backgrounds/PNG/Postapocalypce1/Bright/postapocalypse1.png", sprWidth3, sprHeight3);
 
 	// Criando a instância de nosso objeto sprite do Personagem
-	personagem.initialize(1,6);
+	personagem.initialize(1, 7);
 	personagem.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	personagem.setDimensions(glm::vec3(sprWidth/6, sprHeight, 1.0));
+	personagem.setDimensions(glm::vec3(sprWidth/7, sprHeight, 1.0));
 	personagem.setShader(&shader);
 	personagem.setTexID(texID);
 
@@ -137,11 +139,11 @@ int main()
 		}
 
 		Enemy enemy;
-		enemy.initialize(1, 6, std::rand() % 4);
+		enemy.initialize(1, 11, std::rand() % 4);
 		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 0.0));
-		enemy.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
+		enemy.setDimensions(glm::vec3(sprWidth2/11, sprHeight2, 1.0));
 		enemy.setShader(&shader);
-		enemy.setTexID(texID3);
+		enemy.setTexID(texID2);
 		vetorInimigos.push_back(enemy);
 	}
 
@@ -149,9 +151,9 @@ int main()
 	Sprite background;
 	background.initialize(1,1);
 	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	background.setDimensions(glm::vec3(sprWidth2, sprHeight2, 1.0));
+	background.setDimensions(glm::vec3(sprWidth3, sprHeight3, 1.0));
 	background.setShader(&shader);
-	background.setTexID(texID2);	
+	background.setTexID(texID3);	
 
 
 	//Cria a matriz de projeção paralela ortogáfica

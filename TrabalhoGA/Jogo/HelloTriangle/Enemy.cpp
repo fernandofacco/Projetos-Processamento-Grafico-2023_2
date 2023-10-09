@@ -16,7 +16,6 @@ void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
 {
 	this->nAnimations = nAnimations;
 	this->nFrames = nFrames;
-
 	ds = 1.0 / (float)nFrames;
 	dt = 1.0 / (float)nAnimations;
 	iFrame = 0;
@@ -130,8 +129,9 @@ void Enemy::update()
 	glm::mat4 model = glm::mat4(1); //matriz identidade
 	//Aplicando as transformações
 	model = glm::translate(model, position);
-	//rotate..
 
+	if (direcao == MOVING_TOP_LEFT || direcao == MOVING_DOWN_LEFT) scaleFactor = glm::vec3(-dimensions.x, dimensions.y, dimensions.z);
+	else if (direcao == MOVING_TOP_RIGHT || direcao == MOVING_DOWN_RIGHT) scaleFactor = dimensions;
 
 	model = glm::scale(model, scaleFactor);
 	//Enviando a matriz de modelo para o shader
@@ -139,7 +139,7 @@ void Enemy::update()
 
 	shader->setVec2("offsets", iFrame * ds, iAnimation * dt);
 
-
+	iFrame = (iFrame + 1) % nFrames;
 	//Desconecta com o VAO
 	glBindVertexArray(0);
 }

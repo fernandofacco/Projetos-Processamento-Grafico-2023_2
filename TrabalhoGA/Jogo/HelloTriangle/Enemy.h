@@ -42,12 +42,12 @@ protected:
 	glm::vec3 position, dimensions, rotationAxis;
 	float angle;
 	float vel;
-	int direcao;
 
 	Shader* shader; //armazena o endereço do shader
 
 	int nAnimations, nFrames, iAnimation, iFrame;
 	float ds, dt;
+	int direcao;
 	glm::vec3 scaleFactor;
 
 };
