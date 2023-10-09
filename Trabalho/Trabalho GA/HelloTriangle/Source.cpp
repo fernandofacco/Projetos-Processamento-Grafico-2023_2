@@ -20,7 +20,7 @@ using namespace std;
 //Classe Sprite 
 #include "Sprite.h"
 
-#include "Object.h"
+#include "Enemy.h"
 
 //Classe Timer
 #include "Timer.h"
@@ -35,7 +35,7 @@ int setupTexture(string filePath, int &width, int &height);
 int setupSprite();
 
 // Dimensões da janela (pode ser alterado em tempo de execução)
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1440, HEIGHT = 900;
 
 Sprite personagem; 
 // Object meuArrayFixo[100];
@@ -45,8 +45,11 @@ int main()
 {
 	// Inicialização da GLFW
 	glfwInit();
-	std::vector<Object> vetorObjetos;
-	vetorObjetos.reserve(100);
+
+	// Vetor contendo todos os inimigos
+	std::vector<Enemy> vetorInimigos;
+	vetorInimigos.reserve(100);
+
 	//Muita atenção aqui: alguns ambientes não aceitam essas configurações
 	//Você deve adaptar para a versão do OpenGL suportada por sua placa
 	//Sugestão: comente essas linhas de código para desobrir a versão e
@@ -82,7 +85,8 @@ int main()
 
 	// Definindo as dimensões da viewport com as mesmas dimensões da janela da aplicação
 	int width, height;
-	
+	glfwGetFramebufferSize(window, &width, &height);
+
 	// Compilando e buildando o programa de shader
 	Shader shader("../shaders/helloTriangle.vs", "../shaders/helloTriangle.fs");
 
@@ -108,18 +112,37 @@ int main()
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 	for (int i = 0; i < 10; i++) {
-		int randomNumber = std::rand();
-		int randomXAxysInRange = 50 + (randomNumber % (750 - 50 + 1));
-		randomNumber = std::rand();
-		int randomYAxysInRange = 50 + (randomNumber % (550 - 50 + 1));
-		Object object;
-		object.initialize(1, 6, randomNumber % 4);
+		int canto = std::rand() % 4; // 0: cima, 1: direita, 2: baixo, 3: esquerda
+		int randomXAxis = 0;
+		int randomYAxis = 0;
+
+		switch (canto) {
+		case 0: // Cima
+			randomXAxis = 10 + (std::rand() % (width - 100)) + 50;
+			randomYAxis = height - 10;
+			break;
+		case 1: // Direita
+			randomXAxis = width - 10;
+			randomYAxis = 10 + (std::rand() % (height - 100)) + 50;
+			break;
+		case 2: // Baixo
+			randomXAxis = 10 + (std::rand() % (width - 100)) + 50;
+			randomYAxis = 10;
+			break;
+		case 3: // Esquerda
+			randomXAxis = 10;
+			randomYAxis = 10 + (std::rand() % (height - 100)) + 50;
+			break;
+		}
+
+		Enemy enemy;
+		enemy.initialize(1, 6, std::rand() % 4, width, height);
 		//object.setPosition(glm::vec3(randomInRange, 600 + i * 100, 0.0));
-		object.setPosition(glm::vec3(randomXAxysInRange, randomYAxysInRange, 0.0));
-		object.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
-		object.setShader(&shader);
-		object.setTexID(texID3);
-		vetorObjetos.push_back(object);
+		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 0.0));
+		enemy.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
+		enemy.setShader(&shader);
+		enemy.setTexID(texID3);
+		vetorInimigos.push_back(enemy);
 	}
 
 	//Criando a instância de nosso objeto sprite do fundo (background)
@@ -133,7 +156,7 @@ int main()
 
 	//Cria a matriz de projeção paralela ortogáfica
 	glm::mat4 projection = glm::mat4(1); //matriz identidade
-	projection = glm::ortho(0.0, 800.0, 0.0, 600.0, -1.0, 1.0);
+	projection = glm::ortho(0.0, 1440.0, 0.0, 900.0, -1.0, 1.0);
 	
 	shader.setMat4("projection", glm::value_ptr(projection));
 	shader.setInt("texbuffer", 0);
@@ -148,14 +171,18 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_ALWAYS);
 
-	clock_t inicio = clock();
-	int quantObjects = 0;
 	Timer timer;
 
-	std::time_t startTime = std::time(nullptr);
+	time_t startTime = time(nullptr);
+	int contador = 0;
+
 	// Loop da aplicação - "game loop"
 	while (!glfwWindowShouldClose(window))
 	{
+		// Cálculo de tempo desde o último inimigo criado
+		time_t currentTime = time(nullptr);
+		double elapsedTime = difftime(currentTime, startTime);
+
 		timer.start();
 		// Checa se houveram eventos de input (key pressed, mouse moved etc.) e chama as funções de callback correspondentes
 		glfwPollEvents();
@@ -178,10 +205,17 @@ int main()
 		//-------------------------------------------------------------
 		personagem.update();
 		personagem.draw();
+		//-------------------------------------------------------------
 
-		for (int i = 0; i < vetorObjetos.size(); i++) {
-			vetorObjetos[i].update();
-			vetorObjetos[i].draw();
+		// Criar inimigos a cada X segundos
+		if (elapsedTime >= 2.0) {
+			contador++; 
+			startTime = currentTime; 
+		}
+
+		for (int i = 0; i < vetorInimigos.size() && i < contador; i++) {
+			vetorInimigos[i].update();
+			vetorInimigos[i].draw();
 		}
 		//--------------------------------------------------------------
 

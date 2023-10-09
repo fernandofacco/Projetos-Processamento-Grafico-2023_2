@@ -13,14 +13,13 @@
 
 enum direcao { MOVING_TOP_RIGHT, MOVING_TOP_LEFT, MOVING_DOWN_RIGHT, MOVING_DOWN_LEFT };
 
-class Object
+class Enemy
 {
 public:
-	Object();
-	~Object();
-	void initialize(int nAnimations, int nFrames, int randomDirectionNumber);
+	Enemy();
+	~Enemy();
+	void initialize(int nAnimations, int nFrames, int randomDirectionNumber, int width, int height);
 	inline void setTexID(GLuint texID) { this->texID = texID; }
-
 	inline void setPosition(glm::vec3 position) { this->position = position; }
 	inline void setDimensions(glm::vec3 dimensions) { this->dimensions = dimensions; scaleFactor = dimensions; }
 	inline void setShader(Shader* shader) { this->shader = shader; }
@@ -45,6 +44,7 @@ protected:
 
 	Shader* shader; //armazena o endereço do shader
 
+	int width, height;
 	int nAnimations, nFrames, iAnimation, iFrame;
 	float ds, dt;
 	glm::vec3 scaleFactor;

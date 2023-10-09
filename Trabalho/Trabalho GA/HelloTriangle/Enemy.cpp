@@ -1,21 +1,24 @@
-#include "Object.h"
+#include "Enemy.h"
 
-Object::Object()
+Enemy::Enemy()
 {
 	//Inicializar outros atributos
 	vel = 5;
 }
 
-Object::~Object()
+Enemy::~Enemy()
 {
 	// Pede pra OpenGL desalocar os buffers
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void Object::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
+void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber, int width, int heigth)
 {
 	this->nAnimations = nAnimations;
 	this->nFrames = nFrames;
+	this->width = width;
+	this->height = height;
+
 	ds = 1.0 / (float)nFrames;
 	dt = 1.0 / (float)nAnimations;
 	iFrame = 0;
@@ -74,25 +77,26 @@ void Object::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
 			direcao = MOVING_DOWN_LEFT;
 			break;
 		default:
-			std::cerr << "Erro: Valor aleatório fora do intervalo esperado." << std::endl;
+			break;
 	}
 }
 
-void Object::update()
+void Enemy::update()
 {
+	// Movimentacao em diagonal
 	switch (direcao) {
 		case MOVING_TOP_RIGHT:
 			moveTopRight();
-			if (position.y >= 600) {
+			if (position.y >= 900) {
 				direcao = MOVING_DOWN_RIGHT;
 			}
-			if (position.x >= 800) {
+			if (position.x >= 1440) {
 				direcao = MOVING_TOP_LEFT;
 			}
 			break;
 		case MOVING_TOP_LEFT:
 			moveTopLeft();
-			if (position.y >= 600) {
+			if (position.y >= 900) {
 				direcao = MOVING_DOWN_LEFT;
 			}
 			if (position.x <= 0) {
@@ -104,7 +108,7 @@ void Object::update()
 			if (position.y <= 0) {
 				direcao = MOVING_TOP_RIGHT;
 			}
-			if (position.x >= 800) {
+			if (position.x >= 1440) {
 				direcao = MOVING_DOWN_LEFT;
 			}
 			break;
@@ -120,26 +124,7 @@ void Object::update()
 		default:
 			break;
 	}
-	/*if (direcao == MOVING_TOP_RIGHT)
-	{
-		moveDown();
 
-		// Verifique se atingiu o limite superior da tela e, se sim, mude a direção.
-		if (position.y <= 0)
-		{
-			indoParaBaixo = false;
-		}
-	}
-	else if (indoParaBaixo == false)
-	{
-		moveUp();
-
-		// Verifique se atingiu o limite inferior da tela e, se sim, mude a direção.
-		if (position.y >= 600)
-		{
-			indoParaBaixo = true;
-		}
-	}*/
 	//Conecta com o VAO
 	glBindVertexArray(VAO);
 
@@ -161,7 +146,7 @@ void Object::update()
 	glBindVertexArray(0);
 }
 
-void Object::draw()
+void Enemy::draw()
 {
 	//Conecta com o VAO
 	glBindVertexArray(VAO);
@@ -179,25 +164,25 @@ void Object::draw()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Object::moveTopLeft()
+void Enemy::moveTopLeft()
 {
 	position.x -= vel;
 	position.y += vel;
 }
 
-void Object::moveTopRight()
+void Enemy::moveTopRight()
 {
 	position.x += vel;
 	position.y += vel;
 }
 
-void Object::moveDownLeft()
+void Enemy::moveDownLeft()
 {
 	position.x -= vel;
 	position.y -= vel;
 }
 
-void Object::moveDownRight()
+void Enemy::moveDownRight()
 {
 	position.x += vel;
 	position.y -= vel;

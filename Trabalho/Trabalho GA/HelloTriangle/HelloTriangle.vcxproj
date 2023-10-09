@@ -118,7 +118,7 @@
     <ClCompile Include="..\..\Common\src\Shader.cpp" />
     <ClCompile Include="..\..\Dependencies\stb_image\stb_image.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -126,7 +126,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Common\include\Shader.h" />
     <ClInclude Include="..\..\Dependencies\stb_image\stb_image.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
