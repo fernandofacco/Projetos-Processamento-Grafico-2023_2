@@ -19,7 +19,9 @@ public:
 	inline void setTexID(GLuint texID) { this->texID = texID; }
 
 	inline void setPosition(glm::vec3 position) { this->position = position; }
+	inline glm::vec3 getPosition() { return position; }
 	inline void setDimensions(glm::vec3 dimensions) { this->dimensions = dimensions; scaleFactor = dimensions; }
+	inline glm::vec3 getDimensions() { return dimensions; }
 	inline void setShader(Shader* shader) { this->shader = shader; }
 	inline void setState(int state) { this->state = state; }
 

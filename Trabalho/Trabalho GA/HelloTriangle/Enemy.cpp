@@ -12,12 +12,10 @@ Enemy::~Enemy()
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber, int width, int heigth)
+void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
 {
 	this->nAnimations = nAnimations;
 	this->nFrames = nFrames;
-	this->width = width;
-	this->height = height;
 
 	ds = 1.0 / (float)nFrames;
 	dt = 1.0 / (float)nAnimations;

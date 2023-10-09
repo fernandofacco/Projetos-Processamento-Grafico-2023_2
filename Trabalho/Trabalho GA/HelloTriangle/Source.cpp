@@ -27,7 +27,8 @@ using namespace std;
 
 // Protótipo da função de callback de teclado
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-// void criarObjeto(Shader shader, int texID, int sprWidth, int sprHeight, int i);
+
+bool checkCollision(Sprite& object1, Enemy& object2);
 
 // Protótipos das funções
 int setupGeometry();
@@ -136,8 +137,7 @@ int main()
 		}
 
 		Enemy enemy;
-		enemy.initialize(1, 6, std::rand() % 4, width, height);
-		//object.setPosition(glm::vec3(randomInRange, 600 + i * 100, 0.0));
+		enemy.initialize(1, 6, std::rand() % 4);
 		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 0.0));
 		enemy.setDimensions(glm::vec3(sprWidth / 6, sprHeight, 1.0));
 		enemy.setShader(&shader);
@@ -151,7 +151,7 @@ int main()
 	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
 	background.setDimensions(glm::vec3(sprWidth2, sprHeight2, 1.0));
 	background.setShader(&shader);
-	//background.setTexID(texID2);	
+	background.setTexID(texID2);	
 
 
 	//Cria a matriz de projeção paralela ortogáfica
@@ -216,6 +216,10 @@ int main()
 		for (int i = 0; i < vetorInimigos.size() && i < contador; i++) {
 			vetorInimigos[i].update();
 			vetorInimigos[i].draw();
+
+			if (checkCollision(personagem, vetorInimigos[i])) {
+				glfwSetWindowShouldClose(window, GL_TRUE);
+			}
 		}
 		//--------------------------------------------------------------
 
@@ -427,3 +431,20 @@ int setupSprite()
 }
 
 
+bool checkCollision(Sprite& object1, Enemy& object2) {
+	// Obtém as posições e dimensões dos objetos
+	glm::vec3 pos1 = object1.getPosition();
+	glm::vec3 pos2 = object2.getPosition();
+	glm::vec3 size1 = object1.getDimensions();
+	glm::vec3 size2 = object2.getDimensions();
+
+	// Verifica se ocorre colisão com base nas coordenadas das bounding boxes
+	if (pos1.x + (size1.x - 100) > pos2.x && pos1.x < pos2.x + (size2.x - 100) &&
+		pos1.y + (size1.y - 100) > pos2.y && pos1.y < pos2.y + (size2.y - 100)) {
+		// Colisão detectada
+		return true;
+	}
+
+	// Não há colisão
+	return false;
+}

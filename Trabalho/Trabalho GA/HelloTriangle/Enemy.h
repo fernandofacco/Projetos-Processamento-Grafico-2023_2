@@ -18,10 +18,12 @@ class Enemy
 public:
 	Enemy();
 	~Enemy();
-	void initialize(int nAnimations, int nFrames, int randomDirectionNumber, int width, int height);
+	void initialize(int nAnimations, int nFrames, int randomDirectionNumber);
 	inline void setTexID(GLuint texID) { this->texID = texID; }
 	inline void setPosition(glm::vec3 position) { this->position = position; }
+	inline glm::vec3 getPosition() { return position; }
 	inline void setDimensions(glm::vec3 dimensions) { this->dimensions = dimensions; scaleFactor = dimensions; }
+	inline glm::vec3 getDimensions() { return dimensions; }
 	inline void setShader(Shader* shader) { this->shader = shader; }
 
 	void update();
@@ -44,7 +46,6 @@ protected:
 
 	Shader* shader; //armazena o endereço do shader
 
-	int width, height;
 	int nAnimations, nFrames, iAnimation, iFrame;
 	float ds, dt;
 	glm::vec3 scaleFactor;
