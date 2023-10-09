@@ -139,8 +139,8 @@ int main()
 		}
 
 		Enemy enemy;
-		enemy.initialize(1, 11, std::rand() % 4);
-		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 0.0));
+		enemy.initialize(1, 11);
+		enemy.setPosition(glm::vec3(randomXAxis, randomYAxis, 1.0));
 		enemy.setDimensions(glm::vec3(sprWidth2/11, sprHeight2, 1.0));
 		enemy.setShader(&shader);
 		enemy.setTexID(texID2);
@@ -151,7 +151,7 @@ int main()
 	Sprite background;
 	background.initialize(1,1);
 	background.setPosition(glm::vec3(400.0, 300.0, 0.0));
-	background.setDimensions(glm::vec3(sprWidth3, sprHeight3, 1.0));
+	background.setDimensions(glm::vec3(sprWidth3+200, sprHeight3+200, 1.0));
 	background.setShader(&shader);
 	background.setTexID(texID3);	
 

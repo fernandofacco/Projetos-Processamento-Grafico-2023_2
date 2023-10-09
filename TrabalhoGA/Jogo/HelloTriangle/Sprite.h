@@ -17,7 +17,6 @@ public:
 	~Sprite();
 	void initialize(int nAnimations, int nFrames);
 	inline void setTexID(GLuint texID) { this->texID = texID; }
-
 	inline void setPosition(glm::vec3 position) { this->position = position; }
 	inline glm::vec3 getPosition() { return position; }
 	inline void setDimensions(glm::vec3 dimensions) { this->dimensions = dimensions; scaleFactor = dimensions; }

@@ -12,7 +12,7 @@ Enemy::~Enemy()
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
+void Enemy::initialize(int nAnimations, int nFrames)
 {
 	this->nAnimations = nAnimations;
 	this->nFrames = nFrames;
@@ -20,6 +20,8 @@ void Enemy::initialize(int nAnimations, int nFrames, int randomDirectionNumber)
 	dt = 1.0 / (float)nAnimations;
 	iFrame = 0;
 	iAnimation = 0;
+
+	int randomDirectionNumber = std::rand() % 4;
 
 	GLfloat vertices[] = {
 		//Primeiro Triângulo

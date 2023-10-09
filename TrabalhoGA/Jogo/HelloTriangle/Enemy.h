@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 // GLM
 #include <glm/glm.hpp>
@@ -18,7 +17,7 @@ class Enemy
 public:
 	Enemy();
 	~Enemy();
-	void initialize(int nAnimations, int nFrames, int randomDirectionNumber);
+	void initialize(int nAnimations, int nFrames);
 	inline void setTexID(GLuint texID) { this->texID = texID; }
 	inline void setPosition(glm::vec3 position) { this->position = position; }
 	inline glm::vec3 getPosition() { return position; }
