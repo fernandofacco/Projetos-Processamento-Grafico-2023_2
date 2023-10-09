@@ -8,3 +8,6 @@
    
 ### 3. Altere a posição de uma geometria (triângulo ou retângulo) nas 4 direções (cima, baixo, esquerda e direita) utilizando comandos de teclado para o controle (WASD ou setas). ###
    ![gif](/Lista3/Prints/3.gif)
+
+### (Desafio-extra) “Screensaver”: implemente um algoritmo que controle uma geometria (triângulo ou quadrilátero) com comportamento parecido com o do jogo “Pong” (quando atinge os limites da tela, espelha o vetor de direção). ###
+   ![gif](/Lista3/Prints/screensaver.gif)
