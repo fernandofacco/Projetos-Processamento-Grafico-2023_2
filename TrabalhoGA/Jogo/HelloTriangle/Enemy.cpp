@@ -86,37 +86,37 @@ void Enemy::update()
 	switch (direcao) {
 		case MOVING_TOP_RIGHT:
 			moveTopRight();
-			if (position.y >= 900) {
+			if (position.y >= 900-20) {
 				direcao = MOVING_DOWN_RIGHT;
 			}
-			if (position.x >= 1440) {
+			if (position.x >= 1440-20) {
 				direcao = MOVING_TOP_LEFT;
 			}
 			break;
 		case MOVING_TOP_LEFT:
 			moveTopLeft();
-			if (position.y >= 900) {
+			if (position.y >= 900-25) {
 				direcao = MOVING_DOWN_LEFT;
 			}
-			if (position.x <= 0) {
+			if (position.x <= 0+25) {
 				direcao = MOVING_TOP_RIGHT;
 			}
 			break;
 		case MOVING_DOWN_RIGHT:
 			moveDownRight();
-			if (position.y <= 0) {
+			if (position.y <= 0+25) {
 				direcao = MOVING_TOP_RIGHT;
 			}
-			if (position.x >= 1440) {
+			if (position.x >= 1440-25) {
 				direcao = MOVING_DOWN_LEFT;
 			}
 			break;
 		case MOVING_DOWN_LEFT:
 			moveDownLeft();
-			if (position.y <= 0) {
+			if (position.y <= 0 + 25) {
 				direcao = MOVING_TOP_LEFT;
 			}
-			if (position.x <= 0) {
+			if (position.x <= 0 + 25) {
 				direcao = MOVING_DOWN_RIGHT;
 			}
 			break;

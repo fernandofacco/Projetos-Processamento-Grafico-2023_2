@@ -438,8 +438,8 @@ bool checkCollision(Sprite& object1, Enemy& object2) {
 	glm::vec3 size2 = object2.getDimensions();
 
 	// Verifica se ocorre colisão com base nas coordenadas das bounding boxes
-	if (pos1.x + (size1.x * 0.3) > pos2.x&& pos1.x < pos2.x + (size2.x * 0.3) &&
-		pos1.y + (size1.y * 0.3) > pos2.y&& pos1.y < pos2.y + (size2.y * 0.3)) {
+	if (pos1.x + (size1.x * 0.3) > pos2.x && pos1.x < pos2.x + (size2.x * 0.3) &&
+		pos1.y + (size1.y * 0.3) > pos2.y && pos1.y < pos2.y + (size2.y * 0.3)) {
 		// Colisão detectada
 		return true;
 	}
