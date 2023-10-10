@@ -8,7 +8,7 @@ A ou ← - Mover-se para a esquerda <br>
 S ou ↓ - Mover-se para baixo <br>
 D ou → - Mover-se para a direita <br>
 
-*Dica:* Clicar duas teclas rapidamente ao mesmo tempo é mais rápido.
+**Dica:** Clicar duas teclas rapidamente ao mesmo tempo é mais rápido.
 
 ## Como executar ##
 As dependências estão pré-compiladas para Windows 10 32-bits e compilador do Visual Studio 2019/2022
