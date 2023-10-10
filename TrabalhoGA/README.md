@@ -3,12 +3,12 @@
 Jogo desenvolvido no Grau A por Fernando, Luis e Vítor para a disciplina de Processamento Gráfico do curso de Ciência da Computação da Unisinos.
 
 ## COMANDOS ##
-W ou ↑ - Mover-se para cima
-A ou ← - Mover-se para a esquerda
-S ou ↓ - Mover-se para baixo
-D ou → - Mover-se para a direita
+W ou ↑ - Mover-se para cima <br>
+A ou ← - Mover-se para a esquerda <br>
+S ou ↓ - Mover-se para baixo <br>
+D ou → - Mover-se para a direita <br>
 
-Dica: Clicar duas teclas rapidamente ao mesmo tempo é mais rápido.
+*Dica:* Clicar duas teclas rapidamente ao mesmo tempo é mais rápido.
 
 ## Como executar ##
 As dependências estão pré-compiladas para Windows 10 32-bits e compilador do Visual Studio 2019/2022
