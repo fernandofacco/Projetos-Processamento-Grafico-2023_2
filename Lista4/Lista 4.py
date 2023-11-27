@@ -9,6 +9,7 @@ imgGray = img.copy() # Grayscale
 imgInversao = img.copy() # Inversão
 imgBinarizacao = cv.cvtColor(img,cv.COLOR_BGR2GRAY) # Binarização
 imgVignette = img.copy() # Efeito Vignette
+
 corModificadoraRed = [255, 0, 0]
 corModificadoraGreen = [0, 255, 0]
 corModificadoraBlue = [0, 0, 255]
